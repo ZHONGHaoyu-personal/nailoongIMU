@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>内蒙古奶龙大学</title>
+<style>
+  :root {
+    --grass: #3f7d3a;
+    --grass-deep: #2c5a2a;
+    --grass-light: #6aa84f;
+    --sky: #bfe3f2;
+    --sky-deep: #7fb8d8;
+    --cream: #fdf6e3;
+    --milk: #ffffff;
+    --milk-shadow: #e8dcc0;
+    --brown: #5a3d2b;
+    --brown-light: #8a6a4f;
+    --accent: #e85d3f;
+    --accent-deep: #c7442a;
+    --gold: #f2b632;
+    --ink: #2b2b2b;
+    --font-display: "ZCOOL KuaiLe", "Comic Sans MS", cursive;
+    --font-body: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    background: var(--sky);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ===== 天空背景 ===== */
+  .sky {
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    background: linear-gradient(180deg, #8ecbe8 0%, var(--sky) 55%, #d8f0fa 100%);
+  }
+
+  /* 云朵 */
+  .cloud {
+    position: fixed;
+    background: rgba(255,255,255,0.9);
+    border-radius: 999px;
+    z-index: -2;
+    animation: drift linear infinite;
+  }
+  .cloud::before, .cloud::after {
+    content: "";
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+  }
+  .cloud::before { width: 55%; height: 140%; top: -70%; left: 12%; }
+  .cloud::after  { width: 45%; height: 120%; top: -55%; right: 10%; }
+  .cloud.c1 { width: 180px; height: 55px; top: 8%; left: -200px; animation-duration: 70s; }
+  .cloud.c2 { width: 240px; height: 70px; top: 20%; left: -260px; animation-duration: 95s; animation-delay: -30s; opacity: .8; }
+  .cloud.c3 { width: 150px; height: 45px; top: 5%; left: -160px; animation-duration: 60s; animation-delay: -15s; opacity: .7; }
+  @keyframes drift {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc(100vw + 400px)); }
+  }
+
+  /* 草原 */
+  .grass {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: 34vh;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse at 20% 0%, var(--grass-light), transparent 60%),
+      radial-gradient(ellipse at 80% 0%, var(--grass-light), transparent 60%),
+      linear-gradient(180deg, var(--grass-light) 0%, var(--grass) 45%, var(--grass-deep) 100%);
+  }
+  .grass::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(90deg, transparent 0 60px, rgba(0,0,0,0.06) 60px 62px);
+  }
+
+  /* 蒙古包 */
+  .yurt {
+    position: fixed;
+    bottom: 30vh;
+    z-index: -1;
+    width: 150px; height: 110px;
+  }
+  .yurt .dome {
+    width: 150px; height: 90px;
+    background: linear-gradient(180deg, #f5ead6, #e3d2b0);
+    border-radius: 75px 75px 0 0;
+    position: relative;
+    box-shadow: inset 0 -10px 0 rgba(0,0,0,0.05);
+  }
+  .yurt .dome::before {
+    content: "";
+    position: absolute;
+    top: 8px; left: 50%;
+    transform: translateX(-50%);
+    width: 26px; height: 26px;
+    background: radial-gradient(circle at 40% 35%, #fff, #d8c9a8);
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 4px rgba(90,61,43,0.25);
+  }
+  .yurt .wall {
+    width: 150px; height: 34px;
+    background: repeating-linear-gradient(90deg, #c9a86a 0 22px, #b8945a 22px 26px);
+    border-radius: 0 0 10px 10px;
+  }
+  .yurt .door {
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 34px; height: 40px;
+    background: var(--brown);
+    border-radius: 6px 6px 0 0;
+  }
+  .yurt.y1 { left: 6%; }
+  .yurt.y2 { right: 8%; transform: scale(0.8); bottom: 29vh; }
+
+  /* 羊群 */
+  .sheep {
+    position: fixed;
+    bottom: 34vh;
+    z-index: -1;
+    font-size: 30px;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+    animation: bob 4s ease-in-out infinite;
+  }
+  .sheep.s1 { left: 18%; animation-delay: 0s; }
+  .sheep.s2 { right: 22%; font-size: 22px; animation-delay: 1.2s; }
+  .sheep.s3 { left: 42%; font-size: 18px; animation-delay: 2s; opacity: .85; }
+  @keyframes bob {
+    0%,100% { transform: translateY(0) rotate(-2deg); }
+    50%     { transform: translateY(-8px) rotate(2deg); }
+  }
+
+  /* ===== 主卡片 ===== */
+  .stage {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .card {
+    position: relative;
+    max-width: 720px;
+    width: 100%;
+    background: var(--cream);
+    border-radius: 28px;
+    padding: 44px 40px 40px;
+    box-shadow:
+      0 24px 60px rgba(44,90,42,0.28),
+      inset 0 2px 0 rgba(255,255,255,0.8);
+    border: 3px solid var(--milk-shadow);
+    animation: rise 0.9s cubic-bezier(.2,.9,.3,1.2) both;
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(40px) scale(.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .est {
+    font-family: var(--font-display);
+    color: var(--brown-light);
+    letter-spacing: 3px;
+    font-size: 14px;
+    margin-bottom: 6px;
+    opacity: 0;
+    animation: fade 0.6s 0.2s forwards;
+  }
+
+  .logo {
+    width: min(400px, 80vw); height: min(400px, 80vw);
+    margin: 6px auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pop 0.7s 0.35s cubic-bezier(.2,.9,.3,1.4) both;
+  }
+  .logo img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  @keyframes pop {
+    from { transform: scale(0) rotate(-20deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  @keyframes fade { to { opacity: 1; } }
+
+  .en-name {
+    font-family: var(--font-display);
+    color: var(--brown-light);
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fade 0.6s 0.5s forwards;
+  }
+
+  .cn-name {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 8vw, 64px);
+    color: var(--accent);
+    text-shadow: 3px 3px 0 var(--accent-deep), 6px 6px 0 rgba(0,0,0,0.06);
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fade 0.6s 0.6s forwards;
+    letter-spacing: 2px;
+  }
+
+  .tagline {
+    font-family: var(--font-display);
+    font-size: 25px;
+    color: var(--brown);
+    margin-bottom: 22px;
+    opacity: 0;
+    animation: fade 0.6s 0.75s forwards;
+  }
+
+  .tagline .milk {
+    display: inline-block;
+    animation: wobble 2.4s ease-in-out infinite;
+    transform-origin: 50% 100%;
+  }
+  @keyframes wobble {
+    0%,100% { transform: rotate(0); }
+    25% { transform: rotate(-8deg); }
+    75% { transform: rotate(8deg); }
+  }
+
+  .facts {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 8px 0 26px;
+    opacity: 0;
+    animation: fade 0.6s 0.9s forwards;
+  }
+  .facts li {
+    background: var(--milk);
+    border: 2px solid var(--milk-shadow);
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--brown);
+    box-shadow: 0 3px 0 var(--milk-shadow);
+  }
+  .facts li b { color: var(--accent); }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    opacity: 0;
+    animation: fade 0.6s 1.05s forwards;
+  }
+
+  .btn {
+    font-family: var(--font-display);
+    font-size: 17px;
+    padding: 12px 26px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn:active { transform: translateY(2px); }
+  .btn-primary {
+    background: linear-gradient(180deg, var(--accent), var(--accent-deep));
+    color: #fff;
+    box-shadow: 0 5px 0 var(--accent-deep), 0 8px 16px rgba(199,68,42,.35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--accent-deep), 0 12px 20px rgba(199,68,42,.4); }
+  .btn-ghost {
+    background: var(--milk);
+    color: var(--brown);
+    border: 2px solid var(--milk-shadow);
+    box-shadow: 0 4px 0 var(--milk-shadow);
+  }
+  .btn-ghost:hover { transform: translateY(-2px); }
+
+  .footer {
+    margin-top: 26px;
+    font-size: 12px;
+    color: var(--brown-light);
+    opacity: 0;
+    animation: fade 0.6s 1.2s forwards;
+  }
+  .footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .footer a:hover { text-decoration: underline; }
+
+  /* 奶龙吉祥物 */
+  .dragon {
+    position: fixed;
+    bottom: 8vh;
+    right: 3%;
+    z-index: 1;
+    width: 200px; height: 200px;
+    filter: drop-shadow(0 6px 8px rgba(0,0,0,0.2));
+    animation: float 4s ease-in-out infinite;
+    cursor: pointer;
+    transition: transform .2s;
+    user-select: none;
+  }
+  .dragon img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .dragon:hover { transform: scale(1.1) rotate(-4deg); }
+  @keyframes float {
+    0%,100% { transform: translateY(0) rotate(-3deg); }
+    50%     { transform: translateY(-16px) rotate(3deg); }
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 26vh;
+    right: 5%;
+    background: var(--milk);
+    border: 2px solid var(--gold);
+    border-radius: 14px;
+    padding: 10px 16px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--brown);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .3s, transform .3s;
+    pointer-events: none;
+    z-index: 2;
+    max-width: 200px;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 640px) {
+    .card { padding: 30px 20px; }
+    .dragon { right: 4%; bottom: 26vh; width: 80px; height: 80px; }
+    .toast { right: 4%; bottom: 22vh; }
+    .yurt.y2 { display: none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- 天空与云 -->
+  <div class="sky"></div>
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+
+  <!-- 草原 -->
+  <div class="grass"></div>
+
+  <!-- 蒙古包 -->
+  <div class="yurt y1">
+    <div class="dome"></div>
+    <div class="wall"></div>
+    <div class="door"></div>
+  </div>
+  <div class="yurt y2">
+    <div class="dome"></div>
+    <div class="wall"></div>
+    <div class="door"></div>
+  </div>
+
+  <!-- 羊群 -->
+  <div class="sheep s1">🐑</div>
+  <div class="sheep s2">🐑</div>
+  <div class="sheep s3">🐏</div>
+
+  <!-- 奶龙吉祥物 -->
+  <div class="dragon" id="dragon"><img src="pic_compressed.png" alt="奶龙" /></div>
+  <div class="toast" id="toast">哞~ 奶龙已就位，护送你入学！</div>
+
+  <!-- 主内容 -->
+  <main class="stage">
+    <div class="card">
+      <div class="est">EST. 1957 · 内蒙古</div>
+      <div class="logo"><img src="long1_compressed.png" alt="内蒙古奶龙大学校徽" /></div>
+      <div class="en-name">Inner Mongolia Nailong University</div>
+      <h1 class="cn-name">内蒙古奶龙大学</h1>
+      <p class="tagline">🐉 欢迎来到北疆学府 · 世界奶都 🐉</p>
+
+      <ul class="facts">
+        <li>🏔️ <b>1957</b> 年建校</li>
+        <li>🥇 211 · <b>自封</b></li>
+        <li>🐉 奶龙繁育研究中心</li>
+        <li>🍖 手把肉管够</li>
+      </ul>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="https://www.imu.edu.cn" target="_blank">前往内蒙古大学官网 →</a>
+        <button class="btn btn-ghost" id="copyBtn">📋 复制奶龙群号</button>
+      </div>
+
+      <p class="footer">
+        友链：<a href="https://nai.amoe.cc/" target="_blank">NaiList · 奶群列表 ↗</a>
+      </p>
+    </div>
+  </main>
+
+  <script>
+    const dragon = document.getElementById('dragon');
+    const toast = document.getElementById('toast');
+
+    dragon.addEventListener('click', () => {
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    });
+
+    const copyBtn = document.getElementById('copyBtn');
+    copyBtn.addEventListener('click', async () => {
+      const qq = '奶龙内蒙古分群：966249060';
+      try {
+        await navigator.clipboard.writeText(qq);
+        copyBtn.textContent = '✅ 已复制群号';
+      } catch {
+        copyBtn.textContent = '❌ 复制失败，手动记下吧';
+      }
+      setTimeout(() => { copyBtn.textContent = '📋 复制内大奶龙群号'; }, 2000);
+    });
+  </script>
+</body>
+</html>
